@@ -1,0 +1,109 @@
+version: "3.5"
+services:
+
+  bootnode:
+    build: "."
+    command:
+      - "geth"
+      - "--syncmode=full"
+      - "--ethstats=boot-node:pqd@192.167.98.4:3000"
+      - "--datadir=/datadir"
+      - "--genesis=/datadir/genesis.json"
+      - "--bootnodes=enode://177ae5db445a2f70db781b019aedd928f5b1528a7a43448840b022408f9a21509adcce0b37c87d59da68d47a16879cc1e95a62bbac9723f7b22f4365b2afabbe@202.143.111.229:32010"
+    volumes:
+      - "./genesis.json:/datadir/genesis.json"
+      - "./datadir/bootnode:/datadir/geth"
+    ports:
+      - "30303:30303"
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    restart: always
+
+  # validator_1:
+  #   image: ankrnetwork/bas-template-bsc:devel
+  #   command:
+  #     - "geth"
+  #     - "--datadir=/datadir"
+  #     - "--genesis=/datadir/genesis.json"
+  #     - "--mine"
+  #     - "--password=/datadir/password.txt"
+  #     - "--allow-insecure-unlock"
+  #     - "--unlock=0x08fae3885e299c24ff9841478eb946f41023ac69"
+  #     - "--miner.etherbase=0x08fae3885e299c24ff9841478eb946f41023ac69"
+  #     - "--bootnodes=enode://5c8e90050fabb7e14e4921dc107caf533140112245e7a231d0edc49861cd779760ad4804e7034952a5cc79422fa9d31c54e9a6141fb4995af7a6bfce7a39140f@host.docker.internal:30303"
+  #     - "--gcmode=archive"
+  #     - "--syncmode=full"
+  #     - "--networkid=17243"
+  #   volumes:
+  #     - "./genesis.json:/datadir/genesis.json"
+  #     - "./genesis/keystore:/datadir/keystore"
+  #     - "./genesis/password.txt:/datadir/password.txt"
+  #     - "./datadir/validator_1:/datadir/geth"
+  #   extra_hosts:
+  #     - 'host.docker.internal:host-gateway'
+  #   restart: always
+ 
+  # rpc:
+  #   image: ankrnetwork/bas-template-bsc:devel
+  #   command:
+  #     - "geth"
+  #     - "--datadir=/datadir"
+  #     - "--genesis=/datadir/genesis.json"
+  #     - "--bootnodes=enode://5c8e90050fabb7e14e4921dc107caf533140112245e7a231d0edc49861cd779760ad4804e7034952a5cc79422fa9d31c54e9a6141fb4995af7a6bfce7a39140f@host.docker.internal:30303"
+  #     - "--networkid=17243"
+  #     - "--gcmode=archive"
+  #     - "--syncmode=full"
+  #     - "--http"
+  #     - "--http.addr=0.0.0.0"
+  #     - "--http.api=eth,net,web3,debug,trace,txpool"
+  #     - "--http.port=8545"
+  #     - "--http.corsdomain=*"
+  #     - "--http.vhosts=*"
+  #     - "--ws"
+  #     - "--ws.addr=0.0.0.0"
+  #     - "--ws.api=eth,net,web3,debug,trace,txpool"
+  #     - "--ws.port=8546"
+  #     - "--ws.origins=*"
+  #   extra_hosts:
+  #     - 'host.docker.internal:host-gateway'
+  #   ports:
+  #     - "8545:8545"
+  #     - "8546:8546"
+  #   volumes:
+  #     - "./genesis.json:/datadir/genesis.json"
+  #     - "./genesis/keystore:/datadir/keystore"
+  #     - "./genesis/password.txt:/datadir/password.txt"
+  #     - "./datadir/rpc:/datadir/geth"
+  #   restart: always
+
+  # faucet:
+  #   image: ankrnetwork/bas-template-bsc:devel
+  #   command:
+  #     - "faucet"
+  #     - "--genesis=/datadir/genesis.json"
+  #     - "--bootnodes=enode://5c8e90050fabb7e14e4921dc107caf533140112245e7a231d0edc49861cd779760ad4804e7034952a5cc79422fa9d31c54e9a6141fb4995af7a6bfce7a39140f@host.docker.internal:30303"
+  #     - "--network=17243"
+  #     - "--account.json=/datadir/keystore/UTC--2022-02-02T10-59-47.185Z--b891fe7b38f857f53a7b5529204c58d5c487280b"
+  #     - "--account.pass=/datadir/password.txt"
+  #     - "--rpcapi=ws://host.docker.internal:8546"
+  #     - "--noauth=true"
+  #     - "--faucet.name=BAS"
+  #     - "--faucet.amount=10"
+  #     - "--faucet.tiers=5"
+  #   ports:
+  #     - "3000:8080"
+  #   volumes:
+  #     - "./genesis.json:/datadir/genesis.json"
+  #     - "./genesis/keystore:/datadir/keystore"
+  #     - "./genesis/password.txt:/datadir/password.txt"
+  #   extra_hosts:
+  #     - 'host.docker.internal:host-gateway'
+  #   restart: always
+  # genesis-config:
+  #   image: ankrnetwork/bas-genesis-config:devel
+  #   command: ["--http"]
+  #   extra_hosts:
+  #     - 'host.docker.internal:host-gateway'
+  #   ports:
+  #     - "8080:8080"
+  #   restart: always
